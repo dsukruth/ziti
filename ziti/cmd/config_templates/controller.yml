@@ -1,7 +1,7 @@
 v: 3
 
 #trace:
-#  path: "{{ .Controller.Web.BindPoints.AddressHostname }}.trace"
+#  path: "{{ .Controller.Web.BindPoints.AddressAddress }}.trace"
 
 #profile:
 #  memory:
@@ -75,7 +75,7 @@ ctrl:
   #maxOutstandingConnects: {{ .Controller.Ctrl.DefaultOutstandingConnects }}
   # the number of milliseconds to wait before a hello synchronization fails and closes the connection ({{ .Controller.Ctrl.MinConnectTimeout.Milliseconds }}ms to {{ .Controller.Ctrl.MaxConnectTimeout.Milliseconds }}ms, default: {{ .Controller.Ctrl.DefaultConnectTimeout.Milliseconds }}ms)
   #connectTimeoutMs:       {{ .Controller.Ctrl.DefaultConnectTimeout.Milliseconds }}
-  listener:             tls:{{ .Controller.Ctrl.ListenerHostname }}:{{ .Controller.Ctrl.ListenerPort }}
+  listener:             tls:{{ .Controller.Ctrl.ListenerAddress }}:{{ .Controller.Ctrl.ListenerPort }}
 
 # the endpoint that management tools connect to the controller over.
 mgmt:
@@ -87,7 +87,7 @@ mgmt:
   #maxOutstandingConnects: {{ .Controller.Mgmt.DefaultOutstandingConnects }}
   # the number of milliseconds to wait before a hello synchronization fails and closes the connection ({{ .Controller.Mgmt.MinConnectTimeout.Milliseconds }}ms to {{ .Controller.Mgmt.MaxConnectTimeout.Milliseconds }}ms, default: {{ .Controller.Mgmt.DefaultConnectTimeout.Milliseconds }}ms)
   #connectTimeoutMs:       {{ .Controller.Mgmt.DefaultConnectTimeout.Milliseconds }}
-  listener:             tls:{{ .Controller.Mgmt.ListenerHostname }}:{{ .Controller.Mgmt.ListenerPort }}
+  listener:             tls:{{ .Controller.Mgmt.ListenerAddress }}:{{ .Controller.Mgmt.ListenerPort }}
 
 #metrics:
 #  influxdb:
@@ -125,7 +125,7 @@ edge:
     # address - required
     # The default address (host:port) to use for enrollment for the Client API. This value must match one of the addresses
     # defined in this Controller.WebListener.'s bindPoints.
-    address: {{ .Controller.EdgeApi.Hostname }}:{{ .Controller.EdgeApi.Port }}
+    address: {{ .Controller.EdgeApi.Address }}:{{ .Controller.EdgeApi.Port }}
   # This section is used to define option that are used during enrollment of Edge Routers, Ziti Edge Identities.
   enrollment:
     # signingCert - required
@@ -165,11 +165,11 @@ web:
     bindPoints:
       #interface - required
       # A host:port string on which network interface to listen on. 0.0.0.0 will listen on all interfaces
-      - interface: {{ .Controller.Web.BindPoints.InterfaceHostname }}:{{ .Controller.Web.BindPoints.InterfacePort }}
+      - interface: {{ .Controller.Web.BindPoints.InterfaceAddress }}:{{ .Controller.Web.BindPoints.InterfacePort }}
         # address - required
         # The public address that external incoming requests will be able to resolve. Used in request processing and
         # response content that requires full host:port/path addresses.
-        address: {{ .Controller.Web.BindPoints.AddressHostname }}:{{ .Controller.Web.BindPoints.AddressPort }}
+        address: {{ .Controller.Web.BindPoints.AddressAddress }}:{{ .Controller.Web.BindPoints.AddressPort }}
     # identity - optional
     # Allows the webListener to have a specific identity instead of defaulting to the root 'identity' section.
     identity:
