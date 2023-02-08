@@ -307,6 +307,7 @@ function setupEnvironment {
   mkdir -p "${ZITI_BIN_ROOT}"
   mkdir -p "${ZITI_HOME}"
   mkdir -p "${ZITI_HOME}/db"
+  mkdir -p "${ZITI_PKI}"
 
   if [[ "${ENV_FILE-}" == "" ]]; then export ENV_FILE="${ZITI_HOME}/${ZITI_NETWORK}.env"; fi
 
@@ -702,25 +703,21 @@ function createControllerConfig {
 
 # Helper function to create a private edge router
 function createPrivateRouterConfig {
-  local router_name="${1-}"
-  _create_router_config "${router_name}" "private"
+  _create_router_config "${1-}" "private"
 }
 
 # Helper function to create a public edge router
 function createEdgeRouterConfig {
-  local router_name="${1-}"
-  _create_router_config "${router_name}" "public"
+  _create_router_config "${1-}" "public"
 }
 
 function createEdgeRouterWssConfig {
-  local router_name="${1-}"
-  _create_router_config "${router_name}" "wss"
+  _create_router_config "${1-}" "wss"
 }
 
 # Helper function to create a fabric router
 function createFabricRouterConfig {
-  local router_name="${1-}"
-  _create_router_config "${router_name}" "fabric"
+  _create_router_config "${1-}" "fabric"
 }
 
 # The main create router config function, all others point to this
@@ -884,6 +881,10 @@ function expressInstall {
   _issue_greeting
 
   echo -e "$(PURPLE "******** Setting Up Your OpenZiti Environment ********")"
+  # If a parameter was provided, set the network name to this value
+  if [[ "${1-}" != "" ]]; then
+    ZITI_NETWORK="${1-}"
+  fi
   setupEnvironment
   persistEnvironmentValues ""
 
@@ -1312,6 +1313,20 @@ function _portCheck {
       return 1
   fi
   return 0
+}
+
+# ******* Deprecated functions, refer to new functions **********
+function deprecationMessage {
+  echo -e "$(YELLOW "WARNING The ${1} function has been deprecated, please use ${2} going forward")"
+}
+
+function generateEnvFile {
+  deprecationMessage generateEnvFile persistEnvironmentValues
+  persistEnvironmentValues
+}
+function waitForController {
+  deprecationMessage waitForController _wait_for_controller
+  _wait_for_controller
 }
 
 set +uo pipefail
