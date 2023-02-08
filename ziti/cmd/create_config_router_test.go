@@ -247,7 +247,7 @@ func TestSetZitiRouterIdentitySetsAllIdentitiesAndEdgeRouterRawName(t *testing.T
 	assert.Equal(t, blank, rtv.IdentityCA)
 
 	// Set the env variable
-	_ = os.Setenv(constants.ZitiEdgeRouterRawNameVarName, expectedRawName)
+	_ = os.Setenv(constants.ZitiEdgeRouterNameVarName, expectedRawName)
 
 	SetZitiRouterIdentity(rtv, expectedRawName)
 
@@ -274,7 +274,7 @@ func TestSetZitiRouterIdentitySetsAllIdentitiesAndEdgeRouterRawNameToHostWhenBla
 	assert.Equal(t, blank, rtv.IdentityCA)
 
 	// Set the env variable to an empty value
-	_ = os.Setenv(constants.ZitiEdgeRouterRawNameVarName, "")
+	_ = os.Setenv(constants.ZitiEdgeRouterNameVarName, "")
 
 	SetZitiRouterIdentity(rtv, expectedRawName)
 

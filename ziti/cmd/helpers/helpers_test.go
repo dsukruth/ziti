@@ -76,7 +76,7 @@ func TestGetZitiCtrlAdvertisedAddressWhenUnset(t *testing.T) {
 	expectedValue, _ := os.Hostname()
 
 	// Check that the value matches
-	actualValue, _ := GetCtrlWebAdvertisedHostname()
+	actualValue, _ := GetCtrlWebAdvertisedAddress()
 	assert.Equal(t, expectedValue, actualValue)
 
 	// The env variable should be populated with the expected value
@@ -93,7 +93,7 @@ func TestGetZitiCtrlAdvertisedAddressWhenSet(t *testing.T) {
 	_ = os.Setenv(varName, expectedValue)
 
 	// Check that the value matches
-	actualValue, _ := GetCtrlWebAdvertisedHostname()
+	actualValue, _ := GetCtrlWebAdvertisedAddress()
 	assert.Equal(t, expectedValue, actualValue)
 }
 
@@ -110,7 +110,7 @@ func TestGetZitiCtrlAdvertisedAddressWhenExtDNSSet(t *testing.T) {
 	_ = os.Setenv(extDNSVarName, externalDNSValue)
 
 	// Check that the value matches
-	actualValue, _ := GetCtrlWebAdvertisedHostname()
+	actualValue, _ := GetCtrlWebAdvertisedAddress()
 	assert.Equal(t, externalDNSValue, actualValue)
 }
 

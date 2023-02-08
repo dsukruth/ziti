@@ -268,10 +268,10 @@ function setupEnvironment {
   # PKI Values
   if [[ "${ZITI_PKI-}" == "" ]]; then export ZITI_PKI="${ZITI_HOME}/pki"; fi
   if [[ "${ZITI_PKI_SIGNER_CERT_NAME-}" == "" ]]; then export ZITI_PKI_SIGNER_CERT_NAME="${ZITI_NETWORK}-signing"; fi
-  if [[ "${ZITI_SIGNING_ROOTCA_NAME-}" == "" ]]; then export ZITI_SIGNING_ROOTCA_NAME="${ZITI_PKI_SIGNER_CERT_NAME}-root-ca"; fi
-  if [[ "${ZITI_SIGNING_INTERMEDIATE_NAME-}" == "" ]]; then export ZITI_SIGNING_INTERMEDIATE_NAME="${ZITI_PKI_SIGNER_CERT_NAME}-intermediate"; fi
-  if [[ "${ZITI_PKI_SIGNER_CERT}" == "" ]]; then export ZITI_PKI_SIGNER_CERT="${ZITI_PKI}/${ZITI_SIGNING_INTERMEDIATE_NAME}/certs/${ZITI_SIGNING_INTERMEDIATE_NAME}.cert"; fi
-  if [[ "${ZITI_PKI_SIGNER_KEY}" == "" ]]; then export ZITI_PKI_SIGNER_KEY="${ZITI_PKI}/${ZITI_SIGNING_INTERMEDIATE_NAME}/keys/${ZITI_SIGNING_INTERMEDIATE_NAME}.key"; fi
+  if [[ "${ZITI_PKI_SIGNER_ROOTCA_NAME-}" == "" ]]; then export ZITI_PKI_SIGNER_ROOTCA_NAME="${ZITI_PKI_SIGNER_CERT_NAME}-root-ca"; fi
+  if [[ "${ZITI_PKI_SIGNER_INTERMEDIATE_NAME-}" == "" ]]; then export ZITI_PKI_SIGNER_INTERMEDIATE_NAME="${ZITI_PKI_SIGNER_CERT_NAME}-intermediate"; fi
+  if [[ "${ZITI_PKI_SIGNER_CERT}" == "" ]]; then export ZITI_PKI_SIGNER_CERT="${ZITI_PKI}/${ZITI_PKI_SIGNER_INTERMEDIATE_NAME}/certs/${ZITI_PKI_SIGNER_INTERMEDIATE_NAME}.cert"; fi
+  if [[ "${ZITI_PKI_SIGNER_KEY}" == "" ]]; then export ZITI_PKI_SIGNER_KEY="${ZITI_PKI}/${ZITI_PKI_SIGNER_INTERMEDIATE_NAME}/keys/${ZITI_PKI_SIGNER_INTERMEDIATE_NAME}.key"; fi
 
   # Run these functions to populate other pertinent environment values
   _detect_architecture    # ZITI_ARCH
@@ -614,8 +614,8 @@ function getZiti {
 # Create a custom PKI
 function createPki {
   local retVal pki_allow_list_dns pki_allow_list_ip
-  _check_env_variable ZITI_CTRL_ROOTCA_NAME ZITI_CTRL_EDGE_ROOTCA_NAME ZITI_SIGNING_ROOTCA_NAME \
-                      ZITI_SIGNING_INTERMEDIATE_NAME ZITI_CTRL_INTERMEDIATE_NAME \
+  _check_env_variable ZITI_CTRL_ROOTCA_NAME ZITI_CTRL_EDGE_ROOTCA_NAME ZITI_PKI_SIGNER_ROOTCA_NAME \
+                      ZITI_PKI_SIGNER_INTERMEDIATE_NAME ZITI_CTRL_INTERMEDIATE_NAME \
                       ZITI_CTRL_EDGE_INTERMEDATE_NAME
   retVal=$?
   if [[ "${retVal}" != 0 ]]; then
@@ -625,13 +625,13 @@ function createPki {
 
   _pki_create_ca "${ZITI_CTRL_ROOTCA_NAME}"
   _pki_create_ca "${ZITI_CTRL_EDGE_ROOTCA_NAME}"
-  _pki_create_ca "${ZITI_SIGNING_ROOTCA_NAME}"
+  _pki_create_ca "${ZITI_PKI_SIGNER_ROOTCA_NAME}"
 
-  local ZITI_SPURIOUS_INTERMEDIATE="${ZITI_SIGNING_INTERMEDIATE_NAME}_spurious_intermediate"
+  local ZITI_SPURIOUS_INTERMEDIATE="${ZITI_PKI_SIGNER_INTERMEDIATE_NAME}_spurious_intermediate"
   _pki_create_intermediate "${ZITI_CTRL_ROOTCA_NAME}" "${ZITI_CTRL_INTERMEDIATE_NAME}" 1
   _pki_create_intermediate "${ZITI_CTRL_EDGE_ROOTCA_NAME}" "${ZITI_CTRL_EDGE_INTERMEDATE_NAME}" 1
-  _pki_create_intermediate "${ZITI_SIGNING_ROOTCA_NAME}" "${ZITI_SPURIOUS_INTERMEDIATE}" 2
-  _pki_create_intermediate "${ZITI_SPURIOUS_INTERMEDIATE}" "${ZITI_SIGNING_INTERMEDIATE_NAME}" 1
+  _pki_create_intermediate "${ZITI_PKI_SIGNER_ROOTCA_NAME}" "${ZITI_SPURIOUS_INTERMEDIATE}" 2
+  _pki_create_intermediate "${ZITI_SPURIOUS_INTERMEDIATE}" "${ZITI_PKI_SIGNER_INTERMEDIATE_NAME}" 1
 
   pki_allow_list_dns="${ZITI_CTRL_WEB_ADVERTISED_ADDRESS},localhost,${ZITI_NETWORK}"
   if [[ "${ZITI_CTRL_WEB_ADVERTISED_ADDRESS}" != "" ]]; then pki_allow_list_dns="${pki_allow_list_dns},${ZITI_CTRL_WEB_ADVERTISED_ADDRESS}"; fi

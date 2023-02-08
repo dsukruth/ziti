@@ -25,6 +25,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -93,7 +94,29 @@ func NewCmdCreateConfigEnvironment() *cobra.Command {
 
 			environmentOptions.EnvVars = []EnvVar{
 				{constants.ZitiHomeVarName, constants.ZitiHomeVarDescription, data.ZitiHome},
-				{constants.ZitiEdgeRouterRawNameVarName, constants.ZitiEdgeRouterRawNameVarDescription, data.Router.Edge.Hostname},
+				{constants.CtrlIdentityCertVarName, constants.CtrlIdentityCertVarDescription, data.Controller.Identity.Cert},
+				{constants.CtrlIdentityServerCertVarName, constants.CtrlIdentityServerCertVarDescription, data.Controller.Identity.ServerCert},
+				{constants.CtrlIdentityKeyVarName, constants.CtrlIdentityKeyVarDescription, data.Controller.Identity.Key},
+				{constants.CtrlIdentityCAVarName, constants.CtrlIdentityCAVarDescription, data.Controller.Identity.Ca},
+				{constants.CtrlListenerAddressVarName, constants.CtrlListenerAddressVarDescription, data.Controller.Ctrl.ListenerAddress},
+				{constants.CtrlListenerPortVarName, constants.CtrlListenerPortVarDescription, data.Controller.Ctrl.ListenerPort},
+				{constants.CtrlMgmtAddressVarName, constants.CtrlMgmtAddressVarDescription, data.Controller.Mgmt.ListenerAddress},
+				{constants.CtrlMgmtPortVarName, constants.CtrlMgmtPortVarDescription, data.Controller.Mgmt.ListenerPort},
+				{constants.CtrlEdgeApiAddressVarName, constants.CtrlEdgeApiAddressVarDescription, data.Controller.EdgeApi.Hostname},
+				{constants.CtrlEdgeApiPortVarName, constants.CtrlEdgeApiPortVarDescription, data.Controller.EdgeApi.Port},
+				{constants.CtrlSigningCertVarName, constants.CtrlSigningCertVarDescription, data.Controller.EdgeEnrollment.SigningCert},
+				{constants.CtrlSigningKeyVarName, constants.CtrlSigningKeyVarDescription, data.Controller.EdgeEnrollment.SigningCertKey},
+				{constants.CtrlEdgeIdentityEnrollmentDurationVarName, constants.CtrlEdgeIdentityEnrollmentDurationVarDescription, strconv.FormatInt(int64(data.Controller.EdgeEnrollment.EdgeIdentityDuration), 10)},
+				{constants.CtrlEdgeRouterEnrollmentDurationVarName, constants.CtrlEdgeRouterEnrollmentDurationVarDescription, strconv.FormatInt(int64(data.Controller.EdgeEnrollment.EdgeRouterDuration), 10)},
+				{constants.CtrlWebInterfaceAddressVarName, constants.CtrlWebInterfaceAddressVarDescription, data.Controller.Web.BindPoints.InterfaceAddress},
+				{constants.CtrlWebInterfacePortVarName, constants.CtrlWebInterfacePortVarDescription, data.Controller.Web.BindPoints.InterfacePort},
+				{constants.CtrlWebAdvertisedAddressVarName, constants.CtrlWebAdvertisedAddressVarDescription, data.Controller.Web.BindPoints.AddressAddress},
+				{constants.CtrlWebAdvertisedPortVarName, constants.CtrlWebAdvertisedPortVarDescription, data.Controller.Web.BindPoints.AddressPort},
+				{constants.CtrlWebIdentityCertVarName, constants.CtrlEdgeIdentityCertVarDescription, data.Controller.Web.Identity.Cert},
+				{constants.CtrlWebIdentityServerCertVarName, constants.CtrlEdgeIdentityServerCertVarDescription, data.Controller.Web.Identity.ServerCert},
+				{constants.CtrlWebIdentityKeyVarName, constants.CtrlEdgeIdentityKeyVarDescription, data.Controller.Web.Identity.Key},
+				{constants.CtrlWebIdentityCAVarName, constants.CtrlEdgeIdentityCAVarDescription, data.Controller.Web.Identity.Ca},
+				{constants.ZitiEdgeRouterNameVarName, constants.ZitiEdgeRouterNameVarDescription, data.Router.Edge.Hostname},
 				{constants.ZitiEdgeRouterPortVarName, constants.ZitiEdgeRouterPortVarDescription, data.Router.Edge.Port},
 				{constants.ZitiEdgeRouterListenerBindPortVarName, constants.ZitiEdgeRouterListenerBindPortVarDescription, data.Router.Edge.ListenerBindPort},
 				{constants.ZitiRouterIdentityCertVarName, constants.ZitiRouterIdentityCertVarDescription, data.Router.IdentityCert},
@@ -150,9 +173,53 @@ func NewCmdCreateConfigEnvironment() *cobra.Command {
 		"%-40s %-50s %s\n"+
 		"%-40s %-50s %s\n"+
 		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
+		"%-40s %-50s %s\n"+
 		"%-40s %-50s %s",
 		constants.ZitiHomeVarName, constants.ZitiHomeVarDescription, data.ZitiHome,
-		constants.ZitiEdgeRouterRawNameVarName, constants.ZitiEdgeRouterRawNameVarDescription, data.Router.Edge.Hostname,
+		constants.CtrlIdentityCertVarName, constants.CtrlIdentityCertVarDescription, data.Controller.Identity.Cert,
+		constants.CtrlIdentityServerCertVarName, constants.CtrlIdentityServerCertVarDescription, data.Controller.Identity.ServerCert,
+		constants.CtrlIdentityKeyVarName, constants.CtrlIdentityKeyVarDescription, data.Controller.Identity.Key,
+		constants.CtrlIdentityCAVarName, constants.CtrlIdentityCAVarDescription, data.Controller.Identity.Ca,
+		constants.CtrlListenerAddressVarName, constants.CtrlListenerAddressVarDescription, data.Controller.Ctrl.ListenerAddress,
+		constants.CtrlListenerPortVarName, constants.CtrlListenerPortVarDescription, data.Controller.Ctrl.ListenerPort,
+		constants.CtrlMgmtAddressVarName, constants.CtrlMgmtAddressVarDescription, data.Controller.Mgmt.ListenerAddress,
+		constants.CtrlMgmtPortVarName, constants.CtrlMgmtPortVarDescription, data.Controller.Mgmt.ListenerPort,
+		constants.CtrlEdgeApiAddressVarName, constants.CtrlEdgeApiAddressVarDescription, data.Controller.EdgeApi.Hostname,
+		constants.CtrlEdgeApiPortVarName, constants.CtrlEdgeApiPortVarDescription, data.Controller.EdgeApi.Port,
+		constants.CtrlSigningCertVarName, constants.CtrlSigningCertVarDescription, data.Controller.EdgeEnrollment.SigningCert,
+		constants.CtrlSigningKeyVarName, constants.CtrlSigningKeyVarDescription, data.Controller.EdgeEnrollment.SigningCertKey,
+		constants.CtrlEdgeIdentityEnrollmentDurationVarName, constants.CtrlEdgeIdentityEnrollmentDurationVarDescription, strconv.FormatInt(int64(data.Controller.EdgeEnrollment.EdgeIdentityDuration), 10),
+		constants.CtrlEdgeRouterEnrollmentDurationVarName, constants.CtrlEdgeRouterEnrollmentDurationVarDescription, strconv.FormatInt(int64(data.Controller.EdgeEnrollment.EdgeRouterDuration), 10),
+		constants.CtrlWebInterfaceAddressVarName, constants.CtrlWebInterfaceAddressVarDescription, data.Controller.Web.BindPoints.InterfaceAddress,
+		constants.CtrlWebInterfacePortVarName, constants.CtrlWebInterfacePortVarDescription, data.Controller.Web.BindPoints.InterfacePort,
+		constants.CtrlWebAdvertisedAddressVarName, constants.CtrlWebAdvertisedAddressVarDescription, data.Controller.Web.BindPoints.AddressAddress,
+		constants.CtrlWebAdvertisedPortVarName, constants.CtrlWebAdvertisedPortVarDescription, data.Controller.Web.BindPoints.AddressPort,
+		constants.CtrlWebIdentityCertVarName, constants.CtrlEdgeIdentityCertVarDescription, data.Controller.Web.Identity.Cert,
+		constants.CtrlWebIdentityServerCertVarName, constants.CtrlEdgeIdentityServerCertVarDescription, data.Controller.Web.Identity.ServerCert,
+		constants.CtrlWebIdentityKeyVarName, constants.CtrlEdgeIdentityKeyVarDescription, data.Controller.Web.Identity.Key,
+		constants.CtrlWebIdentityCAVarName, constants.CtrlEdgeIdentityCAVarDescription, data.Controller.Web.Identity.Ca,
+		constants.ZitiEdgeRouterNameVarName, constants.ZitiEdgeRouterNameVarDescription, data.Router.Edge.Hostname,
 		constants.ZitiEdgeRouterPortVarName, constants.ZitiEdgeRouterPortVarDescription, data.Router.Edge.Port,
 		constants.ZitiEdgeRouterListenerBindPortVarName, constants.ZitiEdgeRouterListenerBindPortVarDescription, data.Router.Edge.ListenerBindPort,
 		constants.ZitiRouterIdentityCertVarName, constants.ZitiRouterIdentityCertVarDescription, data.Router.IdentityCert,

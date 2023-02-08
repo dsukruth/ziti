@@ -68,7 +68,7 @@ type CtrlValues struct {
 	MinConnectTimeout          time.Duration
 	MaxConnectTimeout          time.Duration
 	DefaultConnectTimeout      time.Duration
-	ListenerHostname           string
+	ListenerAddress            string
 	ListenerPort               string
 }
 
@@ -82,7 +82,7 @@ type MgmtValues struct {
 	MinConnectTimeout          time.Duration
 	MaxConnectTimeout          time.Duration
 	DefaultConnectTimeout      time.Duration
-	ListenerHostname           string
+	ListenerAddress            string
 	ListenerPort               string
 }
 
@@ -116,10 +116,10 @@ type WebValues struct {
 }
 
 type BindPointsValues struct {
-	InterfaceHostname string
-	InterfacePort     string
-	AddressHostname   string
-	AddressPort       string
+	InterfaceAddress string
+	InterfacePort    string
+	AddressAddress   string
+	AddressPort      string
 }
 
 type IdentityValues struct {
@@ -248,21 +248,21 @@ func (data *ConfigTemplateValues) populateConfigValues() {
 	zitiHome, err := cmdHelper.GetZitiHome()
 	handleVariableError(err, constants.ZitiHomeVarName)
 
-	// Get Ziti Controller ctrl:listener host and port
-	ctrlListenerHostname, err := cmdHelper.GetCtrlListenerHostname()
-	handleVariableError(err, constants.CtrlListenerHostnameVarName)
+	// Get Ziti Controller ctrl:listener address and port
+	ctrlListenerAddress, err := cmdHelper.GetCtrlListenerAddress()
+	handleVariableError(err, constants.CtrlListenerAddressVarName)
 	ctrlListenerPort, err := cmdHelper.GetCtrlListenerPort()
 	handleVariableError(err, constants.CtrlListenerPortVarName)
 
-	// Get Ziti Controller mgmt:listener host and port
-	ctrlMgmtHostname, err := cmdHelper.GetCtrlMgmtHostname()
-	handleVariableError(err, constants.CtrlMgmtHostnameVarName)
+	// Get Ziti Controller mgmt:listener address and port
+	ctrlMgmtAddress, err := cmdHelper.GetCtrlMgmtAddress()
+	handleVariableError(err, constants.CtrlMgmtAddressVarName)
 	ctrlMgmtPort, err := cmdHelper.GetCtrlMgmtPort()
 	handleVariableError(err, constants.CtrlMgmtPortVarName)
 
-	// Get Ziti Controller edge:api host and port
-	ctrlEdgeApiHostname, err := cmdHelper.GetCtrlEdgeApiHostname()
-	handleVariableError(err, constants.CtrlEdgeApiHostnameVarName)
+	// Get Ziti Controller edge:api address and port
+	ctrlEdgeApiAddress, err := cmdHelper.GetCtrlEdgeApiAddress()
+	handleVariableError(err, constants.CtrlEdgeApiAddressVarName)
 	ctrlEdgeApiPort, err := cmdHelper.GetCtrlEdgeApiPort()
 	handleVariableError(err, constants.CtrlEdgeApiPortVarName)
 
@@ -274,15 +274,15 @@ func (data *ConfigTemplateValues) populateConfigValues() {
 	ctrlEdgeRouterEnrollmentDuration, err := cmdHelper.GetCtrlEdgeRouterEnrollmentDuration()
 	handleVariableError(err, constants.CtrlEdgeRouterEnrollmentDurationVarName)
 
-	// Get Ziti Controller web:bindPoints interface host and port
-	ctrlWebInterfaceHostname, err := cmdHelper.GetCtrlWebInterfaceHostname()
-	handleVariableError(err, constants.CtrlWebInterfaceHostnameVarName)
+	// Get Ziti Controller web:bindPoints interface address and port
+	ctrlWebInterfaceAddress, err := cmdHelper.GetCtrlWebInterfaceAddress()
+	handleVariableError(err, constants.CtrlWebInterfaceAddressVarName)
 	ctrlWebInterfacePort, err := cmdHelper.GetCtrlWebInterfacePort()
 	handleVariableError(err, constants.CtrlWebInterfacePortVarName)
 
-	// Get Ziti Controller web:bindPoints address host and port
-	ctrlWebAdvertisedHostname, err := cmdHelper.GetCtrlWebAdvertisedHostname()
-	handleVariableError(err, constants.CtrlWebAdvertisedHostnameVarName)
+	// Get Ziti Controller web:bindPoints address address and port
+	ctrlWebAdvertisedAddress, err := cmdHelper.GetCtrlWebAdvertisedAddress()
+	handleVariableError(err, constants.CtrlWebAdvertisedAddressVarName)
 	ctrlWebAdvertisedPort, err := cmdHelper.GetCtrlWebAdvertisedPort()
 	handleVariableError(err, constants.CtrlWebAdvertisedPortVarName)
 
@@ -307,7 +307,7 @@ func (data *ConfigTemplateValues) populateConfigValues() {
 	data.Controller.Ctrl.MinConnectTimeout = channel.MinConnectTimeout
 	data.Controller.Ctrl.MaxConnectTimeout = channel.MaxConnectTimeout
 	data.Controller.Ctrl.DefaultConnectTimeout = channel.DefaultConnectTimeout
-	data.Controller.Ctrl.ListenerHostname = ctrlListenerHostname
+	data.Controller.Ctrl.ListenerAddress = ctrlListenerAddress
 	data.Controller.Ctrl.ListenerPort = ctrlListenerPort
 	// mgmt:
 	data.Controller.Mgmt.MinQueuedConnects = channel.MinQueuedConnects
@@ -319,7 +319,7 @@ func (data *ConfigTemplateValues) populateConfigValues() {
 	data.Controller.Mgmt.MinConnectTimeout = channel.MinConnectTimeout
 	data.Controller.Mgmt.MaxConnectTimeout = channel.MaxConnectTimeout
 	data.Controller.Mgmt.DefaultConnectTimeout = channel.DefaultConnectTimeout
-	data.Controller.Mgmt.ListenerHostname = ctrlMgmtHostname
+	data.Controller.Mgmt.ListenerAddress = ctrlMgmtAddress
 	data.Controller.Mgmt.ListenerPort = ctrlMgmtPort
 	// healthChecks:
 	data.Controller.HealthChecks.Interval = fabCtrl.DefaultHealthChecksBoltCheckInterval
@@ -329,16 +329,16 @@ func (data *ConfigTemplateValues) populateConfigValues() {
 	data.Controller.EdgeApi.APIActivityUpdateBatchSize = edge.DefaultEdgeApiActivityUpdateBatchSize
 	data.Controller.EdgeApi.APIActivityUpdateInterval = edge.DefaultEdgeAPIActivityUpdateInterval
 	data.Controller.EdgeApi.SessionTimeout = edge.DefaultEdgeSessionTimeout
-	data.Controller.EdgeApi.Hostname = ctrlEdgeApiHostname
+	data.Controller.EdgeApi.Hostname = ctrlEdgeApiAddress
 	data.Controller.EdgeApi.Port = ctrlEdgeApiPort
 	data.Controller.EdgeEnrollment.EdgeIdentityDuration = ctrlEdgeIdentityEnrollmentDuration
 	data.Controller.EdgeEnrollment.EdgeRouterDuration = ctrlEdgeRouterEnrollmentDuration
 	data.Controller.EdgeEnrollment.DefaultEdgeIdentityDuration = edge.DefaultEdgeEnrollmentDuration
 	data.Controller.EdgeEnrollment.DefaultEdgeRouterDuration = edge.DefaultEdgeEnrollmentDuration
 	// web:
-	data.Controller.Web.BindPoints.InterfaceHostname = ctrlWebInterfaceHostname
+	data.Controller.Web.BindPoints.InterfaceAddress = ctrlWebInterfaceAddress
 	data.Controller.Web.BindPoints.InterfacePort = ctrlWebInterfacePort
-	data.Controller.Web.BindPoints.AddressHostname = ctrlWebAdvertisedHostname
+	data.Controller.Web.BindPoints.AddressAddress = ctrlWebAdvertisedAddress
 	data.Controller.Web.BindPoints.AddressPort = ctrlWebAdvertisedPort
 	// Web Identities are handled in create_config_controller
 	data.Controller.Web.Options.IdleTimeout = edge.DefaultHttpIdleTimeout

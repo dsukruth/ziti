@@ -69,33 +69,33 @@ func GetZitiHome() (string, error) {
 	return NormalizePath(retVal), nil
 }
 
-func GetCtrlListenerHostname() (string, error) {
-	return getValueOrSetAndGetDefault(constants.CtrlListenerHostnameVarName, constants.DefaultCtrlListenerHostname)
+func GetCtrlListenerAddress() (string, error) {
+	return getValueOrSetAndGetDefault(constants.CtrlListenerAddressVarName, constants.DefaultCtrlListenerHostname)
 }
 
 func GetCtrlListenerPort() (string, error) {
 	return getValueOrSetAndGetDefault(constants.CtrlListenerPortVarName, constants.DefaultCtrlListenerPort)
 }
 
-func GetCtrlMgmtHostname() (string, error) {
-	return getValueOrSetAndGetDefault(constants.CtrlMgmtHostnameVarName, constants.DefaultCtrlListenerHostname)
+func GetCtrlMgmtAddress() (string, error) {
+	return getValueOrSetAndGetDefault(constants.CtrlMgmtAddressVarName, constants.DefaultCtrlListenerHostname)
 }
 
 func GetCtrlMgmtPort() (string, error) {
 	return getValueOrSetAndGetDefault(constants.CtrlMgmtPortVarName, constants.DefaultCtrlMgmtListenerPort)
 }
 
-func GetCtrlEdgeApiHostname() (string, error) {
+func GetCtrlEdgeApiAddress() (string, error) {
 	// Get the controller's web advertised hostname to use as the default
-	defaultHostname, err := GetCtrlWebAdvertisedHostname()
+	defaultHostname, err := GetCtrlWebAdvertisedAddress()
 	if err != nil {
-		err := errors.Wrap(err, "Unable to get "+constants.CtrlWebAdvertisedHostnameVarName)
+		err := errors.Wrap(err, "Unable to get "+constants.CtrlWebAdvertisedAddressVarName)
 		if err != nil {
 			return "", err
 		}
 	}
 
-	return getValueOrSetAndGetDefault(constants.CtrlEdgeApiHostnameVarName, defaultHostname)
+	return getValueOrSetAndGetDefault(constants.CtrlEdgeApiAddressVarName, defaultHostname)
 }
 
 func GetCtrlEdgeApiPort() (string, error) {
@@ -111,17 +111,17 @@ func GetCtrlEdgeApiPort() (string, error) {
 	return getValueOrSetAndGetDefault(constants.CtrlEdgeApiPortVarName, defaultPort)
 }
 
-func GetCtrlWebInterfaceHostname() (string, error) {
+func GetCtrlWebInterfaceAddress() (string, error) {
 	// Get the controller's listener hostname to use as the default
-	defaultHostname, err := GetCtrlListenerHostname()
+	defaultHostname, err := GetCtrlListenerAddress()
 	if err != nil {
-		err := errors.Wrap(err, "Unable to get "+constants.CtrlListenerHostnameVarName)
+		err := errors.Wrap(err, "Unable to get "+constants.CtrlListenerAddressVarName)
 		if err != nil {
 			return "", err
 		}
 	}
 
-	return getValueOrSetAndGetDefault(constants.CtrlWebInterfaceHostnameVarName, defaultHostname)
+	return getValueOrSetAndGetDefault(constants.CtrlWebInterfaceAddressVarName, defaultHostname)
 }
 
 func GetCtrlWebInterfacePort() (string, error) {
@@ -137,7 +137,7 @@ func GetCtrlWebInterfacePort() (string, error) {
 	return getValueOrSetAndGetDefault(constants.CtrlWebInterfacePortVarName, defaultPort)
 }
 
-func GetCtrlWebAdvertisedHostname() (string, error) {
+func GetCtrlWebAdvertisedAddress() (string, error) {
 
 	// Use hostname if web advertised address not set
 	hostname, err := os.Hostname()
@@ -148,7 +148,7 @@ func GetCtrlWebAdvertisedHostname() (string, error) {
 		}
 	}
 
-	return getValueOrSetAndGetDefault(constants.CtrlWebAdvertisedHostnameVarName, hostname)
+	return getValueOrSetAndGetDefault(constants.CtrlWebAdvertisedAddressVarName, hostname)
 }
 
 func GetCtrlWebAdvertisedPort() (string, error) {
